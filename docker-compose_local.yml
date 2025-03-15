@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  web:
+    image: sis-corebo:latest  # Usa la imagen existente
+    ports:
+      - "9090:80"  # Mapea el puerto 80 del contenedor al puerto 80 del host
+    container_name: sis-corebo  # Nombre del contenedor
+    volumes:
+      - type: bind
+        source: C:\Users\Abigail\Documents\proyectos\corebo
+        target: /var/www/html  # Monta la carpeta de Windows en /var/www/html del contenedor

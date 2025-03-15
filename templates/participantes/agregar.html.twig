@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Regitrar Participante{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col-12 text-center">
+			<h1 class=="text-center">Carrera de fin de año 2024</h1>
+		</div>
+		<div class="col-8">
+		<div class="row mb-5">
+			<div class="col-12">
+				{{ form_start(form, {'attr': {'id': 'agregar'},'attr':{'onsubmit' : 'return(validate());'}}) }} {{ form_errors(form) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.nombreParticipante,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.apellidosParticipante,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.talla,{ 'attr': {'class': 'form-control'}, }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.categoria,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.nacimiento,{ 'label':'Fecha de Nacimiento','attr': {'id': 'nacimiento'},'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.telefono,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.numero,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.email,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.pagado,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.tipopago,{ 'attr': {'class': 'form-control'},'label':'Tipo Pago' }) }}
+			</div>
+			<div class="col-12">
+				{{ form_row(form.sexo,{ 'attr': {'class': 'form-control'} }) }}
+			</div>
+			<div class="col-12 mt-3">
+				{{ form_widget(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+				{{ form_row(form._token) }} {{ form_end(form, {'render_rest': false}) }}
+				<a class="btn btn-danger" href="{{wwwroot}}/medico2024" type="button">Cancelar</a>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+      // Form validation code will come here.
+      function validate() {
+      
+         if( document.myForm.participantes[nombreParticipante].value == "" ) {
+            alert( "Please provide your name!" );
+            document.myForm.Name.focus() ;
+            return false;
+         }
+         if( document.myForm.participantes[apellidosParticipante].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[apellidosParticipante].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[edad].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[edad].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[talla].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[talla].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[categoria].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[categoria].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[telefono].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[telefono].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[email].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[email].focus() ;
+            return false;
+         }
+		if( document.myForm.participantes[sexo].value == "" ) {
+            alert( "Please provide your n!" );
+            document.myForm.participantes[sexo].focus() ;
+            return false;
+         }
+         return( true );
+      }
+$(document).ready(function() {
+    var date = new Date();
+    var currentMonth = date.getMonth();
+    var currentDate = date.getDate();
+    var currentYear = date.getFullYear();
+    $('#participantes_nacimiento').datepicker({
+        minDate: new Date(1950, currentMonth, currentDate),
+        dateFormat: 'yy-mm-dd'
+    });
+    
+	$("#agregar").validate({
+		rules: {
+			'participantes[nombreParticipante]': { required: true, minlength: 2},
+			'participantes[apellidosParticipante]': { required:true, email: true},
+			'participantes[edad]': { minlength: 2, maxlength: 15},
+			'participantes[talla]': { required:true, minlength: 2},
+			'participantes[categoria]': { required:true, minlength: 2},
+			'participantes[telefono]': { required:true, minlength: 2},
+			'participantes[email]': { required:true, email: true},
+			'participantes[sexo]': { required:true, minlength: 2},
+			validator: { required:true, maxlength: 4, minlength: 4}
+		},
+		messages: {
+			'participantes[nombreParticipante]': "El campo es obligatorio.",
+			'participantes[apellidosParticipante]': "El campo es obligatorio.",
+			'participantes[edad]': "El campo es obligatorio.",
+			'participantes[talla]': "El campo es obligatorio.",
+			'participantes[categoria]': "El campo es obligatorio.",
+			'participantes[telefono]': "El campo Teléfono no contiene un formato correcto.",
+			'participantes[sexo]': "El campo es obligatorio.",
+			'participantes[email]' : "El campo es obligatorio y debe tener formato de email correcto.",
+			validator : "Inserte los cuatro caracteres de la imagen superior.",
+		}
+	});
+})
+</script>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Participantes!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container-fluid">
+	<div class="row justify-content-center">
+        <div class="col-12 text-center">
+			<h1 class=="text-center">Participantes Registrados Carrera Del Médico 2024</h1>
+		</div>
+		<div class="col-12 mb-3 mt-2">
+			<a type="button" class="btn btn-success d-none" href="{{wwwroot}}/agregar">Agregar</a>
+		</div>
+        <div class="col-12" style="overflow-x: scroll;">
+                <table class="table table-bordered type-a " id='participantes'>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Fecha Nacimiento</th>
+                            <th class="text-center">Número</th>
+                            <th class="text-center">Categoría</th>
+                            <th class="text-center">Télefono</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Talla</th>
+                            <th class="text-center">Sexo</th>
+                            <th class="text-center">Pagado</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,value in participantes %}
+	                            <tr>
+	                                <td class="text-center">
+	                                    {{ key+1 }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.nombre|upper }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.nacimiento }}<br>
+	                                    Edad: {{ value.edad }}
+	                                </td>
+	                                <td class="text-center">
+	                                {{value.numero}}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.categoria }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.telefono }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.email|lower }}<br>
+	                                    {% if value.enviado !='' %}
+	                                    	Confirmación Enviada
+	                                    {% else %}
+	                                    	Correo no enviado	
+	                                    {% endif %}	
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.talla }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.sexo }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.pago }}
+	                                    
+	                                    {% if value.tipopago !='' %}
+	                                    <br>{{ value.tipopago }}
+	                                    {% endif %}	
+	                                    
+	                                    {% if value.folio !='' %}
+	                                    <br>Folio: {{ value.folio }}
+	                                    {% endif %}	
+	                                </td>
+	                                <td class="text-left">
+	                                </td>
+	                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+	
+	</div>
+		<span>{{total}}</span>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+
+function sent2(id){
+    // Creating Our XMLHttpRequest object 
+    let xhr = new XMLHttpRequest();
+ 
+    // Making our connection  
+    let url = '{{wwwroot}}/enviokit/'+id;
+    xhr.open("POST", url, true);
+ 
+    // function execute after request is successful 
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            Swal.fire({
+                type: 'success',
+                html: '<h3>Correo de recoleccción de kit enviado correctamente.</h3>',
+                willClose: () => {
+		            location.reload();
+				}
+      		});
+        }
+    }
+    // Sending our request 
+    xhr.send();
+}
+
+
+
+function sent(id){
+    // Creating Our XMLHttpRequest object 
+    let xhr = new XMLHttpRequest();
+ 
+    // Making our connection  
+    let url = '{{wwwroot}}/correo/'+id;
+    xhr.open("POST", url, true);
+ 
+    // function execute after request is successful 
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            Swal.fire({
+                type: 'success',
+                html: '<h3>Correo de registro enviado correctamente.</h3>',
+                willClose: () => {
+		            location.reload();
+ 					 }
+      		});
+        }
+    }
+    // Sending our request 
+    xhr.send();
+}
+$(function () {
+    var __table = $('#participantes').DataTable({
+		columnDefs: [
+			{
+				targets: [0, 7],   //first name & last name
+				orderable: false, 
+			},
+		], 
+		dom: 'Bfrtip',
+		buttons: [
+            'excel',
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            }
+        ], 
+		"language": {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "Sin Resultados",
+			"info": "Mostrado _END_ de  _MAX_ usuarios", 
+			"infoEmpty":      "Mostrado _END_ de  _MAX_ usuarios",
+			"infoFiltered":   "",
+			"loadingRecords": "Loading...",
+			"processing":     "Processing...",
+			"paginate": {
+				"next":       $.parseHTML('<i class="fa fa-angle-right" aria-hidden="true"></i>'),
+				"previous":   $.parseHTML('<i class="fa fa-angle-left" aria-hidden="true"></i>')
+			},
+        }
+	});
+	
+})
+</script>
+{% endblock %}

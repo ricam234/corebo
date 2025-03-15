@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Participantes!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container-fluid">
+	<div class="row justify-content-center">
+        <div class="col-12 text-center">
+			<h1 class=="text-center">Participantes Registrados Carrera del Médico 2023</h1>
+		</div>
+        <div class="col-12" style="overflow-x: scroll;">
+                <table class="table table-bordered type-a " id='participantes'>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Edad</th>
+                            <th class="text-center">Número</th>
+                            <th class="text-center">Categoría</th>
+                            <th class="text-center">Télefono</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Talla</th>
+                            <th class="text-center">Sexo</th>
+                            <th class="text-center">Tiempo</th>
+                            <th class="text-center">Velocidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,value in participantes %}
+                        	{% if value.paymentid !='' %}
+	                            <tr>
+	                                <td>
+	                                    {{ key+1 }}
+	                                </td>
+	                                <td>
+	                                    {{ value.nombre|lower }}
+	                                </td>
+	                                <td>
+	                                    {{ value.edad }}
+	                                </td>
+	                                <td>
+	                                    {{ value.numero }}
+	                                </td>
+	                                <td>
+	                                    {{ value.categoria }}
+	                                </td>
+	                                <td>
+	                                    {{ value.telefono }}
+	                                </td>
+	                                <td>
+	                                    {{ value.email|lower }}
+	                                </td>
+	                                <td>
+	                                    {{ value.talla }}
+	                                </td>
+	                                <td>
+	                                    {{ value.sexo }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.tiempo }}
+	                                </td>
+	                                <td class="text-center">
+	                                    {{ value.velocidad }}
+	                                </td>
+	                            </tr>
+                            {% endif %}	
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+	</div>
+	<span>{{total}}</span>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(function () {
+    var __table = $('#participantes').DataTable({
+		columnDefs: [
+			{
+				targets: [0, 7],   //first name & last name
+				orderable: false, 
+			},
+		], 
+		dom: 'Bfrtip',
+		buttons: [
+            'excel',
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            }
+        ], 
+		"language": {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "Sin Resultados",
+			"info": "Mostrado _END_ de  _MAX_ usuarios", 
+			"infoEmpty":      "Mostrado _END_ de  _MAX_ usuarios",
+			"infoFiltered":   "",
+			"loadingRecords": "Loading...",
+			"processing":     "Processing...",
+			"paginate": {
+				"next":       $.parseHTML('<i class="fa fa-angle-right" aria-hidden="true"></i>'),
+				"previous":   $.parseHTML('<i class="fa fa-angle-left" aria-hidden="true"></i>')
+			},
+        }
+	});
+})
+</script>
+{% endblock %}
+
